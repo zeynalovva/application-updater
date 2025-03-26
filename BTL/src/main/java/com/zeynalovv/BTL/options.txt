@@ -1,4 +1,0 @@
-folderPath=/home/zeynalovv/Desktop/TestApp
-serverIP=127.0.0.1
-usernameFTP=abbas
-passwordFTP=nigger

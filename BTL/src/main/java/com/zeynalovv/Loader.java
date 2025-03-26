@@ -1,4 +1,4 @@
-package com.zeynalovv.BTL;
+package com.zeynalovv;
 
 import java.nio.file.Path;
 

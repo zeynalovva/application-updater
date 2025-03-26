@@ -1,4 +1,4 @@
-package com.zeynalovv.BTL;
+package com.zeynalovv.AUS;
 
 
 import java.io.*;
@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.stream.Stream;
 import com.fasterxml.jackson.databind.*;
+import com.zeynalovv.Loader;
 
 public class main {
     public static void main(String[] args){
@@ -67,14 +68,16 @@ public class main {
 
         //Parsing the data into a .json file
         ObjectMapper json = new ObjectMapper();
+        Path check = load.getFolderPath().resolve("checksum.json");
         try {
-            Path check = load.getFolderPath().resolve("checksum.json");
             json.writeValue(new File(String.valueOf(check)), table);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
 
 
+        Uploader uploader = new Uploader(load);
+        uploader.upload(String.valueOf(check));
     }
 
 
