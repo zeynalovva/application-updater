@@ -12,7 +12,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.stream.Stream;
 import com.fasterxml.jackson.databind.*;
-import com.zeynalovv.Loader;
+import com.jcraft.jsch.ChannelSftp;
+import com.jcraft.jsch.JSchException;
+import com.jcraft.jsch.SftpException;
 
 public class main {
     public static void main(String[] args){
@@ -30,7 +32,7 @@ public class main {
             return;
         }
 
-        //Getting all the files in the folder
+        //Getting all the files into the folder
         ArrayList<String> relativePaths = new ArrayList<>();
         ArrayList<Path> absolutePaths = new ArrayList<>();
         try{
@@ -68,16 +70,41 @@ public class main {
 
         //Parsing the data into a .json file
         ObjectMapper json = new ObjectMapper();
-        Path check = load.getFolderPath().resolve("checksum.json");
+        Path checksumPath = load.getFolderPath().resolve("checksum.json");
+        boolean flag = false;
+        for(Path i : absolutePaths){
+            if(i.equals(checksumPath)) flag = true;
+        }
+        if(!flag){
+            absolutePaths.add(checksumPath);
+            relativePaths.add("checksum.json");
+        }
         try {
-            json.writeValue(new File(String.valueOf(check)), table);
+            json.writeValue(new File(String.valueOf(checksumPath)), table);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
 
 
-        Uploader uploader = new Uploader(load);
-        uploader.upload(String.valueOf(check));
+
+        //Uploading corresponding files to the remote SFTP sever
+        try {
+            Uploader uploader = new Uploader(load);
+            for (int i = 0; i < absolutePaths.size(); i++) {
+                String filePath = String.valueOf(absolutePaths.get(i));
+                String serverPath = String.valueOf(load.getServerPath().resolve(relativePaths.get(i)));
+                System.out.println("Uploading: " + filePath + " - to - " + serverPath);
+                uploader.uploadFile(filePath, serverPath);
+            }
+            uploader.close();
+        } catch (JSchException | SftpException e) {
+            throw new RuntimeException(e);
+        }
+
+
+
+
+
     }
 
 

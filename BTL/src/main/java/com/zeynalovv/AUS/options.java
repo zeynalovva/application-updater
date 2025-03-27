@@ -1,7 +1,5 @@
 package com.zeynalovv.AUS;
 
-import com.zeynalovv.Loader;
-
 import java.nio.file.Path;
 
 public enum options{
@@ -9,6 +7,12 @@ public enum options{
         @Override
         public void setOptions(Loader load, String value){
             load.setFolderPath(Path.of(value));
+        }
+    },
+    serverPath(){
+        @Override
+        public void setOptions(Loader load, String value){
+            load.setServerPath(Path.of(value));
         }
     },
     serverIP(){

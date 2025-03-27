@@ -1,9 +1,9 @@
-package com.zeynalovv;
+package com.zeynalovv.AUS;
 
 import java.nio.file.Path;
 
 public class Loader {
-    private Path folderPath;
+    private Path folderPath, serverPath;
     private String serverIP, usernameFTP, passwordFTP;
 
     public Loader(Path folderPath){
@@ -26,6 +26,10 @@ public class Loader {
         this.usernameFTP = usernameFTP;
     }
 
+    public void setServerPath(Path serverPath) {
+        this.serverPath = serverPath;
+    }
+
     public Path getFolderPath() {
         return folderPath;
     }
@@ -42,8 +46,12 @@ public class Loader {
         return usernameFTP;
     }
 
-    @Override
-    public String toString() {
-        return this.folderPath + " " + this.usernameFTP + " " + this.passwordFTP + " " + this.serverIP;
+    public Path getServerPath() {
+        return serverPath;
     }
+
+    //@Override
+    //public String toString() {
+    //    return this.folderPath + " " + this.usernameFTP + " " + this.passwordFTP + " " + this.serverIP;
+    //}
 }

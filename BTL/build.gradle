@@ -23,7 +23,7 @@ application {
 
 dependencies {
     implementation 'com.fasterxml.jackson.core:jackson-databind:2.15.0'
-    implementation 'com.github.mwiede:jsch:0.2.24'
+    implementation 'com.github.mwiede:jsch:0.2.19'
 }
 
 test {

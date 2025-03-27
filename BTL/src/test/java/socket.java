@@ -1,23 +1,31 @@
 import com.jcraft.jsch.*;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+
 public class socket {
-    public static void main(String[] args) throws JSchException {
-        connect();
+    public static void main(String[] args) throws JSchException, SftpException, FileNotFoundException {
+        ChannelSftp channelSftp = setupJsch();
+        channelSftp.connect();
+        String serverPath = "/home/zeynalovv/Desktop/ServerApp/Lesson2.pdf";
+        String localPath = "/home/zeynalovv/Desktop/TestApp/Lesson2.pdf";
+        channelSftp.put(localPath, serverPath);
+        channelSftp.exit();
     }
-    public static ChannelSftp connect() throws JSchException {
-        final String FTP_SERVER = "ftp.dlptest.com";
-        final int FTP_PORT = 21;
-        final String FTP_USER = "dlpuser";
-        final String FTP_PASSWORD = "rNrKYTX9g7z3RgJRmxWuGHbeu";
+    public static ChannelSftp setupJsch() throws JSchException, FileNotFoundException, SftpException {
+        final String host = "127.0.0.1";
+        final int port = 22;
+        final String user = "zeynalovv";
+        final String password = "Abbas24042006";
+
         JSch jsch = new JSch();
-        jsch.setKnownHosts("../.ssh/known_hosts");
-        Session jschSession = jsch.getSession(FTP_USER, FTP_SERVER, FTP_PORT);
-        jschSession.setPassword(FTP_PASSWORD);
+        jsch.setKnownHosts("~/.ssh/known_hosts");
+        Session jschSession = jsch.getSession(user, host, port);
+        jschSession.setPassword(password);
         System.out.println("#connect begin.");
         jschSession.connect();
         System.out.println("#connect end.");
         return (ChannelSftp) jschSession.openChannel("sftp");
-
-
     }
 }
