@@ -2,7 +2,7 @@ package com.zeynalovv.AUS;
 
 import java.nio.file.Path;
 
-public class Loader {
+public final class Loader {
     private Path folderPath, serverPath;
     private String serverIP, usernameFTP, passwordFTP;
 

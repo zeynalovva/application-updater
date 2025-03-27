@@ -10,7 +10,8 @@ public class socket {
         channelSftp.connect();
         String serverPath = "/home/zeynalovv/Desktop/ServerApp/Lesson2.pdf";
         String localPath = "/home/zeynalovv/Desktop/TestApp/Lesson2.pdf";
-        channelSftp.put(localPath, serverPath);
+        channelSftp.cd("/home/zeynalovv/Desktop/TestApp");
+        channelSftp.mkdir("Test");
         channelSftp.exit();
     }
     public static ChannelSftp setupJsch() throws JSchException, FileNotFoundException, SftpException {

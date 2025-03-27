@@ -12,7 +12,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.stream.Stream;
 import com.fasterxml.jackson.databind.*;
-import com.jcraft.jsch.ChannelSftp;
 import com.jcraft.jsch.JSchException;
 import com.jcraft.jsch.SftpException;
 
@@ -33,14 +32,23 @@ public class main {
         }
 
         //Getting all the files into the folder
-        ArrayList<String> relativePaths = new ArrayList<>();
-        ArrayList<Path> absolutePaths = new ArrayList<>();
+        ArrayList<String> relativeFilePaths = new ArrayList<>();
+        ArrayList<Path> absoluteFilePaths = new ArrayList<>();
+        ArrayList<String> relativeDirectoryPath = new ArrayList<>();
+        ArrayList<Path> absoluteDirectoryPath = new ArrayList<>();
         try{
             Stream<Path> t = Files.walk(load.getFolderPath());
             t.forEach(x -> {
-                if(Files.isRegularFile(x)) {
-                    relativePaths.add(String.valueOf(load.getFolderPath().relativize(x)));
-                    absolutePaths.add(x);
+                String path = String.valueOf(load.getFolderPath().relativize(x));
+                if(!path.equals("checksum.json")  && !path.equals("options.txt")){
+                    if(Files.isRegularFile(x)) {
+                        relativeFilePaths.add(path);
+                        absoluteFilePaths.add(x);
+                    }
+                    else if(Files.isDirectory(x)){
+                        relativeDirectoryPath.add(path);
+                        absoluteDirectoryPath.add(x);
+                    }
                 }
             });
         } catch (IOException e){
@@ -50,8 +58,8 @@ public class main {
 
         //Hashing the files
         HashMap<String, String> table = new HashMap<>();
-        for (int i = 0; i < absolutePaths.size(); i++) {
-            File file = new File(String.valueOf(absolutePaths.get(i)));
+        for (int i = 0; i < absoluteFilePaths.size(); i++) {
+            File file = new File(String.valueOf(absoluteFilePaths.get(i)));
             try (FileInputStream fis = new FileInputStream(file)) {
                 byte[] bytes = new byte[(int) file.length()];
                 fis.read(bytes);
@@ -59,9 +67,9 @@ public class main {
                 for (byte b : bytes) {
                     byt.append(Integer.toBinaryString((b & 0xFF) + 0x100).substring(1));
                 }
-                table.put(chekcsum(byt.toString()), relativePaths.get(i));
+                table.put(chekcsum(byt.toString()), relativeFilePaths.get(i));
             } catch (FileNotFoundException e) {
-                System.out.println("Could not find the file!\nPath: " + absolutePaths.get(i));
+                System.out.println("Could not find the file!\nPath: " + absoluteFilePaths.get(i));
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
@@ -71,14 +79,8 @@ public class main {
         //Parsing the data into a .json file
         ObjectMapper json = new ObjectMapper();
         Path checksumPath = load.getFolderPath().resolve("checksum.json");
-        boolean flag = false;
-        for(Path i : absolutePaths){
-            if(i.equals(checksumPath)) flag = true;
-        }
-        if(!flag){
-            absolutePaths.add(checksumPath);
-            relativePaths.add("checksum.json");
-        }
+        absoluteFilePaths.add(checksumPath);
+        relativeFilePaths.add("checksum.json");
         try {
             json.writeValue(new File(String.valueOf(checksumPath)), table);
         } catch (IOException e) {
@@ -86,13 +88,21 @@ public class main {
         }
 
 
-
-        //Uploading corresponding files to the remote SFTP sever
+        //Uploading corresponding files and folders into to the remote SFTP server
         try {
             Uploader uploader = new Uploader(load);
-            for (int i = 0; i < absolutePaths.size(); i++) {
-                String filePath = String.valueOf(absolutePaths.get(i));
-                String serverPath = String.valueOf(load.getServerPath().resolve(relativePaths.get(i)));
+
+            //Creating necessary folders in the server directory
+            for(String i : relativeDirectoryPath){
+                uploader.createFolder(i);
+                System.out.println("Created: " + i);
+            }
+
+
+            //Uploading the files
+            for (int i = 0; i < absoluteFilePaths.size(); i++) {
+                String filePath = String.valueOf(absoluteFilePaths.get(i));
+                String serverPath = String.valueOf(load.getServerPath().resolve(relativeFilePaths.get(i)));
                 System.out.println("Uploading: " + filePath + " - to - " + serverPath);
                 uploader.uploadFile(filePath, serverPath);
             }
