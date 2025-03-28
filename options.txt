@@ -1,0 +1,5 @@
+folderPath=/home/zeynalovv/Desktop/TestApp
+serverIP=127.0.0.1:22
+serverPath=/home/zeynalovv/Desktop/ServerApp/
+usernameFTP=zeynalovv
+passwordFTP=Abbas24042006

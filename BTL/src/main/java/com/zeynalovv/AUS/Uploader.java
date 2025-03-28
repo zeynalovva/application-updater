@@ -26,7 +26,7 @@ public final class Uploader {
         channelSftp.put(filePath, serverPath);
     }
 
-    public void createFolder(String directoryPath) throws SftpException {
+    public boolean createFolder(String directoryPath) throws SftpException {
         channelSftp.cd(String.valueOf(load.getServerPath()));
         boolean check = false;
         int count = 0;
@@ -36,7 +36,17 @@ public final class Uploader {
             }
         }
         if(count == directoryPath.length() || directoryPath.isEmpty()) check = true;
-        if(!check) channelSftp.mkdir(directoryPath);
+        if(!check){
+            try{
+                channelSftp.mkdir(directoryPath);
+                return true;
+            }
+            catch (SftpException e){
+                if(e.id == 4) System.out.println("Directory exists: " + directoryPath);
+                return false;
+            }
+        }
+        return false;
     }
 
     public void close(){

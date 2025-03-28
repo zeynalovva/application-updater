@@ -1,32 +1,39 @@
-import com.jcraft.jsch.*;
-
+import java.awt.*;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import javax.swing.*;
+
+
+
 
 public class socket {
-    public static void main(String[] args) throws JSchException, SftpException, FileNotFoundException {
-        ChannelSftp channelSftp = setupJsch();
-        channelSftp.connect();
-        String serverPath = "/home/zeynalovv/Desktop/ServerApp/Lesson2.pdf";
-        String localPath = "/home/zeynalovv/Desktop/TestApp/Lesson2.pdf";
-        channelSftp.cd("/home/zeynalovv/Desktop/TestApp");
-        channelSftp.mkdir("Test");
-        channelSftp.exit();
-    }
-    public static ChannelSftp setupJsch() throws JSchException, FileNotFoundException, SftpException {
-        final String host = "127.0.0.1";
-        final int port = 22;
-        final String user = "zeynalovv";
-        final String password = "Abbas24042006";
+    public static void main(String[] args) throws IOException, InterruptedException {
+        ProcessBuilder processBuilder;
+        String os = System.getProperty("os.name").toLowerCase();
+        Path currentDir = Paths.get(System.getProperty("user.dir"));
+        currentDir = currentDir.resolve("BTL");
+        if (os.contains("win")) {
+            String Dir = String.valueOf(currentDir.resolve("settings.exe"));
+            System.out.println(Dir);
+            processBuilder = new ProcessBuilder("cmd.exe", "/c", "start", "cmd.exe", "/k", Dir);
+        } else if (os.contains("mac") || os.contains("nix") || os.contains("nux")) {
+            String Dir = String.valueOf(currentDir.resolve("settings"));
+            System.out.println(Dir);
+            processBuilder = new ProcessBuilder("/bin/sh", "-c", "x-terminal-emulator -e " + Dir +
+                    " || gnome-terminal -- " + Dir + " || konsole -e " + Dir + " || xfce4-terminal -e " + Dir +
+                    " || mate-terminal -e " + Dir + " || lxterminal -e " + Dir + " || alacritty -e " + Dir +
+                    " || st -e " + Dir + " || xterm -hold -e " + Dir);
+        } else {
+            throw new UnsupportedOperationException("Unsupported OS: " + os);
+        }
+        processBuilder.start();
 
-        JSch jsch = new JSch();
-        jsch.setKnownHosts("~/.ssh/known_hosts");
-        Session jschSession = jsch.getSession(user, host, port);
-        jschSession.setPassword(password);
-        System.out.println("#connect begin.");
-        jschSession.connect();
-        System.out.println("#connect end.");
-        return (ChannelSftp) jschSession.openChannel("sftp");
+
     }
+
+
 }

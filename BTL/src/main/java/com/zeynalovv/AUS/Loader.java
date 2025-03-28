@@ -10,6 +10,8 @@ public final class Loader {
         this.folderPath = folderPath;
     }
 
+    public Loader(){}
+
     public void setFolderPath(Path folderPath) {
         this.folderPath = folderPath;
     }

@@ -10,16 +10,47 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Scanner;
 import java.util.stream.Stream;
 import com.fasterxml.jackson.databind.*;
 import com.jcraft.jsch.JSchException;
 import com.jcraft.jsch.SftpException;
 
 public class main {
-    public static void main(String[] args){
+
+    public static void main(String[] args) {
+        ProcessBuilder processBuilder;
+        String os = System.getProperty("os.name").toLowerCase();
+        Path applicationDir = Paths.get(System.getProperty("user.dir")), currentDir = applicationDir.resolve("BTL");
+        if (os.contains("win")) {
+            String Dir = String.valueOf(currentDir.resolve("settings.exe"));
+            System.out.println(Dir);
+            processBuilder = new ProcessBuilder("cmd.exe", "/c", "start", "cmd.exe", "/k", Dir);
+        } else if (os.contains("mac") || os.contains("nix") || os.contains("nux")) {
+            String Dir = String.valueOf(currentDir.resolve("settings"));
+            System.out.println(Dir);
+            processBuilder = new ProcessBuilder("/bin/sh", "-c", "x-terminal-emulator -e " + Dir +
+                    " || gnome-terminal -- " + Dir + " || konsole -e " + Dir + " || xfce4-terminal -e " + Dir +
+                    " || mate-terminal -e " + Dir + " || lxterminal -e " + Dir + " || alacritty -e " + Dir +
+                    " || st -e " + Dir + " || xterm -hold -e " + Dir);
+        } else {
+            throw new UnsupportedOperationException("Unsupported OS: " + os);
+        }
+        try {
+            Process process = processBuilder.start();
+            process.waitFor();
+        } catch (IOException | InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+        start(applicationDir);
+    }
+
+
+    public static void start(Path applicationDir){
         //Setting up the environment
-        Loader load = new Loader(Path.of("/home/zeynalovv/Desktop/TestApp"));
-        Path option = load.getFolderPath().resolve("options.txt");
+        Loader load = new Loader();
+        Path option = applicationDir.resolve("options.txt");
+        System.out.println(option);
         try {
             BufferedReader read = new BufferedReader(new FileReader(String.valueOf(option)));
             String line;
@@ -88,16 +119,14 @@ public class main {
         }
 
 
+
         //Uploading corresponding files and folders into to the remote SFTP server
         try {
             Uploader uploader = new Uploader(load);
-
             //Creating necessary folders in the server directory
             for(String i : relativeDirectoryPath){
-                uploader.createFolder(i);
-                System.out.println("Created: " + i);
+                if(uploader.createFolder(i)) System.out.println("Created: " + i);
             }
-
 
             //Uploading the files
             for (int i = 0; i < absoluteFilePaths.size(); i++) {
@@ -110,10 +139,6 @@ public class main {
         } catch (JSchException | SftpException e) {
             throw new RuntimeException(e);
         }
-
-
-
-
 
     }
 
