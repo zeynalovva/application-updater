@@ -4,14 +4,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="19305e51-3c8f-43f0-852b-ff5e109814f1" name="Changes" comment="Folder creation and file upload system have been added">
-      <change afterPath="$PROJECT_DIR$/.idea/uiDesigner.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/BTL/settings" afterDir="false" />
+    <list default="true" id="19305e51-3c8f-43f0-852b-ff5e109814f1" name="Changes" comment="Terminal is added which is going to generate settings needed for the app.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BTL/src/main/java/com/zeynalovv/AUS/Loader.java" beforeDir="false" afterPath="$PROJECT_DIR$/BTL/src/main/java/com/zeynalovv/AUS/Loader.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BTL/src/main/java/com/zeynalovv/AUS/Uploader.java" beforeDir="false" afterPath="$PROJECT_DIR$/BTL/src/main/java/com/zeynalovv/AUS/Uploader.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/BTL/src/main/java/com/zeynalovv/AUS/main.java" beforeDir="false" afterPath="$PROJECT_DIR$/BTL/src/main/java/com/zeynalovv/AUS/main.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/BTL/src/test/java/socket.java" beforeDir="false" afterPath="$PROJECT_DIR$/BTL/src/test/java/socket.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/options.txt" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -119,7 +116,7 @@
       <workItem from="1743103123828" duration="636000" />
       <workItem from="1743103766674" duration="3156000" />
       <workItem from="1743108217572" duration="6471000" />
-      <workItem from="1743183202477" duration="3582000" />
+      <workItem from="1743183202477" duration="4986000" />
     </task>
     <task id="LOCAL-00001" summary="Second">
       <option name="closed" value="true" />
@@ -145,7 +142,15 @@
       <option name="project" value="LOCAL" />
       <updated>1743076562922</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="Terminal is added which is going to generate settings needed for the app.">
+      <option name="closed" value="true" />
+      <created>1743186952966</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1743186952966</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -155,6 +160,7 @@
     <MESSAGE value="Second" />
     <MESSAGE value="Third" />
     <MESSAGE value="Folder creation and file upload system have been added" />
-    <option name="LAST_COMMIT_MESSAGE" value="Folder creation and file upload system have been added" />
+    <MESSAGE value="Terminal is added which is going to generate settings needed for the app." />
+    <option name="LAST_COMMIT_MESSAGE" value="Terminal is added which is going to generate settings needed for the app." />
   </component>
 </project>

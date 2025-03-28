@@ -19,38 +19,37 @@ import com.jcraft.jsch.SftpException;
 public class main {
 
     public static void main(String[] args) {
-        ProcessBuilder processBuilder;
+        ProcessBuilder terminal;
         String os = System.getProperty("os.name").toLowerCase();
-        Path applicationDir = Paths.get(System.getProperty("user.dir")), currentDir = applicationDir.resolve("BTL");
+        Path applicationDir = Paths.get(System.getProperty("user.dir")), currentDir = applicationDir.resolve("BTL"), tempDir = null;
         if (os.contains("win")) {
             String Dir = String.valueOf(currentDir.resolve("settings.exe"));
-            System.out.println(Dir);
-            processBuilder = new ProcessBuilder("cmd.exe", "/c", "start", "cmd.exe", "/k", Dir);
+            terminal = new ProcessBuilder("cmd.exe", "/c", "start", "cmd.exe", "/k", Dir);
+            tempDir = Paths.get(System.getenv("TEMP"));
         } else if (os.contains("mac") || os.contains("nix") || os.contains("nux")) {
             String Dir = String.valueOf(currentDir.resolve("settings"));
-            System.out.println(Dir);
-            processBuilder = new ProcessBuilder("/bin/sh", "-c", "x-terminal-emulator -e " + Dir +
+            terminal = new ProcessBuilder("/bin/sh", "-c", "x-terminal-emulator -e " + Dir +
                     " || gnome-terminal -- " + Dir + " || konsole -e " + Dir + " || xfce4-terminal -e " + Dir +
                     " || mate-terminal -e " + Dir + " || lxterminal -e " + Dir + " || alacritty -e " + Dir +
                     " || st -e " + Dir + " || xterm -hold -e " + Dir);
+            tempDir = Paths.get("/tmp");
         } else {
             throw new UnsupportedOperationException("Unsupported OS: " + os);
         }
         try {
-            Process process = processBuilder.start();
-            process.waitFor();
+            Process terminalProc = terminal.start();
+            terminalProc.waitFor();
         } catch (IOException | InterruptedException e) {
             throw new RuntimeException(e);
         }
-        start(applicationDir);
+        start(applicationDir, tempDir);
     }
 
 
-    public static void start(Path applicationDir){
+    public static void start(Path applicationDir, Path tempDir){
         //Setting up the environment
         Loader load = new Loader();
         Path option = applicationDir.resolve("options.txt");
-        System.out.println(option);
         try {
             BufferedReader read = new BufferedReader(new FileReader(String.valueOf(option)));
             String line;
@@ -58,8 +57,17 @@ public class main {
                 initialization(line, load);
             }
         } catch (IOException e) {
-            System.out.println("Could not load the options! Check out options.txt file!");
-            return;
+            try{
+                Path tempPath = tempDir.resolve("YGG97ak4994hJ6nok4Pagg.txt");
+                BufferedReader read = new BufferedReader(new FileReader(String.valueOf(tempPath)));
+                String line;
+                while((line = read.readLine()) != null){
+                    initialization(line, load);
+                }
+            } catch (IOException ex) {
+                System.out.println("Could not load the options! Check out options.txt file!");
+                return;
+            }
         }
 
         //Getting all the files into the folder
