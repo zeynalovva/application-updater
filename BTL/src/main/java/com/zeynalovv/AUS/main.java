@@ -42,33 +42,14 @@ public class main {
         } catch (IOException | InterruptedException e) {
             throw new RuntimeException(e);
         }
+
         start(applicationDir, tempDir);
     }
 
 
     public static void start(Path applicationDir, Path tempDir){
         //Setting up the environment
-        Loader load = new Loader();
-        Path option = applicationDir.resolve("options.txt");
-        try {
-            BufferedReader read = new BufferedReader(new FileReader(String.valueOf(option)));
-            String line;
-            while((line = read.readLine()) != null){
-                initialization(line, load);
-            }
-        } catch (IOException e) {
-            try{
-                Path tempPath = tempDir.resolve("YGG97ak4994hJ6nok4Pagg.txt");
-                BufferedReader read = new BufferedReader(new FileReader(String.valueOf(tempPath)));
-                String line;
-                while((line = read.readLine()) != null){
-                    initialization(line, load);
-                }
-            } catch (IOException ex) {
-                System.out.println("Could not load the options! Check out options.txt file!");
-                return;
-            }
-        }
+        Loader load = new Loader(applicationDir, tempDir);
 
         //Getting all the files into the folder
         ArrayList<String> relativeFilePaths = new ArrayList<>();
