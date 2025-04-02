@@ -81,7 +81,12 @@ public class updater {
             if(!i.equals(directoryTree.get(i))){
                 Path path = currentDir.resolve(directoryTree.get(i));
                 if(Files.exists(path)){
-                    System.out.println(path);
+                    if(!checkFile(path, load).equals(i)){
+                        Downloader.download(directoryTree.get(i), load);
+                    }
+                }
+                else{
+                    Downloader.download(directoryTree.get(i), load);
                 }
 
             }
