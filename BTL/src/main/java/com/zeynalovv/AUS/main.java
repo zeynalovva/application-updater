@@ -10,7 +10,6 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Scanner;
 import java.util.stream.Stream;
 import com.fasterxml.jackson.databind.*;
 import com.jcraft.jsch.JSchException;
@@ -76,6 +75,10 @@ public class main {
             return;
         }
 
+
+
+
+
         //Hashing the files
         HashMap<String, String> table = new HashMap<>();
         for (int i = 0; i < absoluteFilePaths.size(); i++) {
@@ -93,6 +96,9 @@ public class main {
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
+        }
+        for (String i : relativeDirectoryPath){
+            table.put(i, i);
         }
 
 

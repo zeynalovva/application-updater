@@ -2,9 +2,6 @@ package com.zeynalovv.AUS;
 
 import com.jcraft.jsch.*;
 
-import java.nio.file.Path;
-
-
 public final class Uploader {
     private ChannelSftp channelSftp = null;
     private Session jschSession = null;

@@ -4,16 +4,15 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="19305e51-3c8f-43f0-852b-ff5e109814f1" name="Changes" comment="Terminal is added which is going to generate settings needed for the app.">
-      <change afterPath="$PROJECT_DIR$/BTL/src/main/java/com/zeynalovv/AUC/Downloader.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/BTL/src/main/java/com/zeynalovv/AUC/Loader.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/BTL/src/main/java/com/zeynalovv/AUC/options.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/options.txt" afterDir="false" />
+    <list default="true" id="19305e51-3c8f-43f0-852b-ff5e109814f1" name="Changes" comment="Client-side has been created">
+      <change afterPath="$PROJECT_DIR$/BTL/src/main/java/com/zeynalovv/AUC/test.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BTL/src/main/java/com/zeynalovv/AUC/main.java" beforeDir="false" afterPath="$PROJECT_DIR$/BTL/src/main/java/com/zeynalovv/AUC/uploader.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BTL/src/main/java/com/zeynalovv/AUS/Loader.java" beforeDir="false" afterPath="$PROJECT_DIR$/BTL/src/main/java/com/zeynalovv/AUS/Loader.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/BTL/src/main/java/com/zeynalovv/AUC/Downloader.java" beforeDir="false" afterPath="$PROJECT_DIR$/BTL/src/main/java/com/zeynalovv/AUC/Downloader.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/BTL/src/main/java/com/zeynalovv/AUC/Loader.java" beforeDir="false" afterPath="$PROJECT_DIR$/BTL/src/main/java/com/zeynalovv/AUC/Loader.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/BTL/src/main/java/com/zeynalovv/AUC/uploader.java" beforeDir="false" afterPath="$PROJECT_DIR$/BTL/src/main/java/com/zeynalovv/AUC/updater.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/BTL/src/main/java/com/zeynalovv/AUS/Uploader.java" beforeDir="false" afterPath="$PROJECT_DIR$/BTL/src/main/java/com/zeynalovv/AUS/Uploader.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/BTL/src/main/java/com/zeynalovv/AUS/main.java" beforeDir="false" afterPath="$PROJECT_DIR$/BTL/src/main/java/com/zeynalovv/AUS/main.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BTL/src/test/java/socket.java" beforeDir="false" afterPath="$PROJECT_DIR$/BTL/src/test/java/socket.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/options.txt" beforeDir="false" afterPath="$PROJECT_DIR$/BTL/src/main/java/com/zeynalovv/AUC/options.txt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -72,6 +71,7 @@
   <component name="PropertiesComponent">{
   &quot;keyToString&quot;: {
     &quot;Gradle.BTL [:com.testing.test.main()].executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.BTL [:com.zeynalovv.AUC.updater.main()].executor&quot;: &quot;Run&quot;,
     &quot;Gradle.BTL [:com.zeynalovv.AUC.uploader.main()].executor&quot;: &quot;Run&quot;,
     &quot;Gradle.BTL [:com.zeynalovv.AUS.main.main()].executor&quot;: &quot;Run&quot;,
     &quot;Gradle.BTL [:socket.main()].executor&quot;: &quot;Run&quot;,
@@ -81,7 +81,7 @@
     &quot;UI_DESIGNER_EDITOR_MODE.UIDesignerToolWindowManager.WIDTH&quot;: &quot;453&quot;,
     &quot;git-widget-placeholder&quot;: &quot;master&quot;,
     &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;/home/zeynalovv/AppUpdater/BTL&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/home/zeynalovv/AppUpdater/BTL/src/main/java/com/zeynalovv/AUC&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
@@ -96,9 +96,11 @@
 }</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/BTL/src/main/java/com/zeynalovv/AUC" />
       <recent name="$PROJECT_DIR$/BTL" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/BTL/src/main/java/com/zeynalovv/AUC" />
       <recent name="$PROJECT_DIR$" />
     </key>
   </component>
@@ -130,7 +132,10 @@
       <workItem from="1743253821392" duration="347000" />
       <workItem from="1743258239518" duration="1584000" />
       <workItem from="1743268144152" duration="10860000" />
-      <workItem from="1743326694474" duration="2391000" />
+      <workItem from="1743326694474" duration="2753000" />
+      <workItem from="1743432367815" duration="15247000" />
+      <workItem from="1743517243677" duration="5694000" />
+      <workItem from="1743574369097" duration="1187000" />
     </task>
     <task id="LOCAL-00001" summary="Second">
       <option name="closed" value="true" />
@@ -172,7 +177,15 @@
       <option name="project" value="LOCAL" />
       <updated>1743188210490</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="Client-side has been created">
+      <option name="closed" value="true" />
+      <created>1743329982284</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1743329982284</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -194,6 +207,7 @@
     <MESSAGE value="Third" />
     <MESSAGE value="Folder creation and file upload system have been added" />
     <MESSAGE value="Terminal is added which is going to generate settings needed for the app." />
-    <option name="LAST_COMMIT_MESSAGE" value="Terminal is added which is going to generate settings needed for the app." />
+    <MESSAGE value="Client-side has been created" />
+    <option name="LAST_COMMIT_MESSAGE" value="Client-side has been created" />
   </component>
 </project>

@@ -11,7 +11,7 @@ public class Loader {
     private String version, appFolder;
     private Path currenDir;
 
-    public Loader(Path applicationDir){
+    public Loader(Path applicationDir) throws IOException {
         this.currenDir = applicationDir;
         Path option = applicationDir.resolve("options.txt");
         try {
@@ -21,8 +21,7 @@ public class Loader {
                 initialization(line, this);
             }
         } catch (IOException e) {
-            System.out.println("Could not load the options!");
-            return;
+            throw new IOException();
         }
     }
 

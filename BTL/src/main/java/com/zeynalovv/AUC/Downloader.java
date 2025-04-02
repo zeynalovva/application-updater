@@ -13,17 +13,20 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 public class Downloader {
-    private URI url;
-    private Path path;
 
+    public static void download(String filename, Loader load){
+        try{
+            Path pth = Paths.get(load.getAppFolder()).resolve(filename);
+            URI url = load.getServer().resolve(pth.toString());
+            ReadableByteChannel readableByteChannel = Channels.newChannel(url.toURL().openStream());
+            FileOutputStream fileOutputStream = new FileOutputStream(String.valueOf(load.getCurrenDir().resolve(filename)));
+            FileChannel fileChannel = fileOutputStream.getChannel();
+            fileChannel.transferFrom(readableByteChannel, 0, Long.MAX_VALUE);
+            System.out.println(url);
+        }
+        catch (IOException e){
+            System.out.println("Connection refused!");
 
-    public void download(String filename, Loader load) throws IOException, URISyntaxException {
-        Path pth = Paths.get(load.getAppFolder()).resolve(filename);
-        URI url = load.getServer().resolve(pth.toString());
-        ReadableByteChannel readableByteChannel = Channels.newChannel(url.toURL().openStream());
-        FileOutputStream fileOutputStream = new FileOutputStream(String.valueOf(load.getCurrenDir().resolve(filename)));
-        FileChannel fileChannel = fileOutputStream.getChannel();
-        fileChannel.transferFrom(readableByteChannel, 0, Long.MAX_VALUE);
-        System.out.println(url);
+        }
     }
 }
