@@ -1,0 +1,16 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="BTL.main:jar">
+    <output-path>$PROJECT_DIR$/../Desktop/test/updater.jar</output-path>
+    <root id="archive" name="BTL.main.jar">
+      <element id="directory" name="META-INF">
+        <element id="file-copy" path="$PROJECT_DIR$/../Desktop/test/META-INF/MANIFEST.MF" />
+      </element>
+      <element id="module-output" name="BTL.main" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/../.gradle/caches/modules-2/files-2.1/com.github.mwiede/jsch/0.2.19/5e2fe50202386c2f9d25b5c0de6c8b7755111ae8/jsch-0.2.19.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/../.gradle/caches/modules-2/files-2.1/com.fasterxml.jackson.core/jackson-annotations/2.15.0/89b0fd554928425a776a6e97ed010034312af21d/jackson-annotations-2.15.0.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/../.gradle/caches/modules-2/files-2.1/com.fasterxml.jackson.core/jackson-core/2.15.0/12f334a1dc9c6d2854c43ae314024dde8b3ad572/jackson-core-2.15.0.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/../.gradle/caches/modules-2/files-2.1/ch.randelshofer/fastdoubleparser/0.8.0/85c25540369921659556ead85e02c99ef0d24280/fastdoubleparser-0.8.0.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/../.gradle/caches/modules-2/files-2.1/com.fasterxml.jackson.core/jackson-databind/2.15.0/d41caa3a4e9f85382702a059a65c512f85ac230/jackson-databind-2.15.0.jar" path-in-jar="/" />
+    </root>
+  </artifact>
+</component>
