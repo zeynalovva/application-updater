@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/AppUpdater.iml" filepath="$PROJECT_DIR$/.idea/AppUpdater.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/BTL.iml" filepath="$PROJECT_DIR$/.idea/modules/BTL.iml" />
     </modules>
   </component>
 </project>

@@ -79,7 +79,7 @@ public class updater {
 
         for(String i : directoryTree.keySet()){
             if(!i.equals(directoryTree.get(i))){
-                Path path = currentDir.resolve(directoryTree.get(i));
+                Path path = currentDir.resolve(Downloader.reTranslator(Path.of(directoryTree.get(i))));
                 if(Files.exists(path)){
                     if(!checkFile(path, load).equals(i)){
                         Downloader.download(directoryTree.get(i), load);
@@ -91,11 +91,6 @@ public class updater {
 
             }
         }
-
-
-
-
-
     }
 
 
@@ -134,6 +129,8 @@ public class updater {
         }
     }
 
+
+
     @Deprecated
     static void deleteFolders(Loader load, Path currentDir, Map<String, String> directoryTree){
         try{
@@ -152,4 +149,5 @@ public class updater {
             throw new RuntimeException(e);
         }
     }
+
 }

@@ -9,6 +9,7 @@ public final class Loader {
     private Path folderPath, serverPath;
     private String serverIP, usernameFTP, passwordFTP;
 
+    public Loader(){}
     public Loader(Path applicationDir,  Path tempDir){
         Path option = applicationDir.resolve("options.txt");
         try {
