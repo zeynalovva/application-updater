@@ -1,7 +1,9 @@
 package com.zeynalovv.AUC;
 
 import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ArrayNode;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -9,6 +11,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.math.BigInteger;
 import java.net.MalformedURLException;
+import java.net.URI;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -35,16 +38,28 @@ public class updater {
         }
 
 
-        Downloader.download("checksum.json", load);
+        Downloader.download("checksum.json", load, "checksum.json");
         ObjectMapper objectMapper = new ObjectMapper();
-        Map<String, String> directoryTree = null;
+        HashMap<String, String> files = new HashMap<>(), folders = new HashMap<>(), translated = new HashMap<>();
+        Map<String, Object> directoryTree = null;
         try {
-            directoryTree = objectMapper.readValue(new File(String.valueOf(currentDir.resolve("checksum.json"))), new TypeReference<Map<String,String>>(){});
-        } catch (IOException e) {System.out.println("Problem occured!");}
+            directoryTree = objectMapper.readValue(new File(String.valueOf(currentDir.resolve("checksum.json"))), Map.class);
+            for(Map.Entry<String, Object> entry : directoryTree.entrySet()){
+                if(entry.getKey().equals("files")){
+                    files = (HashMap<String, String>) entry.getValue();
+                }
+                else if(entry.getKey().equals("folders")){
+                    folders = (HashMap<String, String>) entry.getValue();
+                }
+                else if(entry.getKey().equals("translated")){
+                    translated = (HashMap<String, String>) entry.getValue();
+                }
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        System.out.println(translated);
 
-
-        //Delete the folders
-        //deleteFolders(load, currentDir, directoryTree);
 
         ArrayList<String> relativeFilePaths = new ArrayList<>();
         ArrayList<Path> absoluteFilePaths = new ArrayList<>();
@@ -70,25 +85,22 @@ public class updater {
         }
 
         //Create folders given by the json
-        for(String i : directoryTree.keySet()){
-            if(i.equals(directoryTree.get(i))){
-                Path mkdir = currentDir.resolve(i);
-                new File(String.valueOf(mkdir)).mkdirs();
-            }
+        for(String i : folders.keySet()){
+            Path mkdir = currentDir.resolve(folders.get(i));
+            new File(String.valueOf(mkdir)).mkdirs();
         }
 
-        for(String i : directoryTree.keySet()){
-            if(!i.equals(directoryTree.get(i))){
-                Path path = currentDir.resolve(Downloader.reTranslator(Path.of(directoryTree.get(i))));
-                if(Files.exists(path)){
-                    if(!checkFile(path, load).equals(i)){
-                        Downloader.download(directoryTree.get(i), load);
-                    }
-                }
-                else{
-                    Downloader.download(directoryTree.get(i), load);
-                }
 
+        //Check if the files have been altered
+        for(String i : files.keySet()){
+            Path path = currentDir.resolve(Path.of(files.get(i)));
+            if(Files.exists(path)){
+                if(!checkFile(path, load).equals(i)){
+                    Downloader.download(translated.get(i), load, files.get(i));
+                }
+            }
+            else {
+                Downloader.download(translated.get(i), load, files.get(i));
             }
         }
     }
