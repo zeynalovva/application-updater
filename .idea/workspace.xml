@@ -10,11 +10,17 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="19305e51-3c8f-43f0-852b-ff5e109814f1" name="Changes" comment="Updater finished, but still needs maintance">
-      <change afterPath="$PROJECT_DIR$/BTL/src/test/java/main.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/BTL/src/main/java/com/zeynalovv/AUC/Updatable.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/BTL/src/main/java/com/zeynalovv/AUC/Updater.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/BTL/src/main/java/com/zeynalovv/AUC/test.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/BTL/src/main/java/com/zeynalovv/AUC/Downloader.java" beforeDir="false" afterPath="$PROJECT_DIR$/BTL/src/main/java/com/zeynalovv/AUC/Downloader.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/BTL/src/main/java/com/zeynalovv/AUC/Loader.java" beforeDir="false" afterPath="$PROJECT_DIR$/BTL/src/main/java/com/zeynalovv/AUC/Loader.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/BTL/src/main/java/com/zeynalovv/AUC/options.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/BTL/src/main/java/com/zeynalovv/AUC/options.txt" beforeDir="false" afterPath="$PROJECT_DIR$/BTL/src/main/java/com/zeynalovv/AUC/options.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/BTL/src/main/java/com/zeynalovv/AUC/updater.java" beforeDir="false" afterPath="$PROJECT_DIR$/BTL/src/main/java/com/zeynalovv/AUC/updater.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/BTL/src/main/java/com/zeynalovv/Testing/main.java" beforeDir="false" afterPath="$PROJECT_DIR$/BTL/src/main/java/com/zeynalovv/Testing/main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/checksum.json" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -90,35 +96,36 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Gradle.BTL [:com.testing.test.main()].executor": "Run",
-    "Gradle.BTL [:com.zeynalovv.AUC.updater.main()].executor": "Run",
-    "Gradle.BTL [:com.zeynalovv.AUC.uploader.main()].executor": "Run",
-    "Gradle.BTL [:com.zeynalovv.AUS.main.main()].executor": "Run",
-    "Gradle.BTL [:com.zeynalovv.Testing.main.main()].executor": "Run",
-    "Gradle.BTL [:socket.main()].executor": "Run",
-    "Gradle.BTL [build].executor": "Run",
-    "Gradle.BTL [clean].executor": "Run",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "UI_DESIGNER_EDITOR_MODE.UIDesignerToolWindowManager.WIDTH": "453",
-    "git-widget-placeholder": "master",
-    "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "/home/zeynalovv/AppUpdater",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "project.structure.last.edited": "Artifacts",
-    "project.structure.proportion": "0.15",
-    "project.structure.side.proportion": "0.2",
-    "settings.editor.selected.configurable": "com.gluonhq.plugin.intellij.options.Options",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Gradle.BTL [:com.testing.test.main()].executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.BTL [:com.zeynalovv.AUC.test.main()].executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.BTL [:com.zeynalovv.AUC.updater.main()].executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.BTL [:com.zeynalovv.AUC.uploader.main()].executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.BTL [:com.zeynalovv.AUS.main.main()].executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.BTL [:com.zeynalovv.Testing.main.main()].executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.BTL [:socket.main()].executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.BTL [build].executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.BTL [clean].executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;UI_DESIGNER_EDITOR_MODE.UIDesignerToolWindowManager.WIDTH&quot;: &quot;453&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/home/zeynalovv/AppUpdater&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Artifacts&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;com.gluonhq.plugin.intellij.options.Options&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/BTL/src/main/java/com/zeynalovv/AUC" />
@@ -297,7 +304,16 @@
       <workItem from="1743848259525" duration="3507000" />
       <workItem from="1743874618308" duration="1898000" />
       <workItem from="1743904355030" duration="9000" />
-      <workItem from="1743921944900" duration="314000" />
+      <workItem from="1743921944900" duration="2576000" />
+      <workItem from="1743936457837" duration="5511000" />
+      <workItem from="1743951794562" duration="188000" />
+      <workItem from="1743956331088" duration="1755000" />
+      <workItem from="1743994983085" duration="2581000" />
+      <workItem from="1744014088125" duration="2034000" />
+      <workItem from="1744028194977" duration="5152000" />
+      <workItem from="1744108255751" duration="3224000" />
+      <workItem from="1744129050858" duration="51000" />
+      <workItem from="1744162690399" duration="4571000" />
     </task>
     <task id="LOCAL-00001" summary="Second">
       <option name="closed" value="true" />
@@ -379,7 +395,15 @@
       <option name="project" value="LOCAL" />
       <updated>1743717544366</updated>
     </task>
-    <option name="localTasksCounter" value="11" />
+    <task id="LOCAL-00011" summary="Updater finished, but still needs maintance">
+      <option name="closed" value="true" />
+      <created>1743922515725</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1743922515725</updated>
+    </task>
+    <option name="localTasksCounter" value="12" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">

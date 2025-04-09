@@ -5,46 +5,22 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.net.URI;
 import java.nio.file.Path;
+import java.util.Map;
 
 public class Loader {
-    private URI server;
-    private String version, appFolder;
-    private Path currenDir;
+    private URI server = null;
+    private String version = "";
+    private Path appPath = null;
 
-    public Loader(Path applicationDir) throws IOException {
-        this.currenDir = applicationDir;
-        Path option = applicationDir.resolve("options.txt");
-        try {
-            BufferedReader read = new BufferedReader(new FileReader(String.valueOf(option)));
-            String line;
-            while((line = read.readLine()) != null){
-                initialization(line, this);
-            }
-        } catch (IOException e) {
-            throw new IOException();
-        }
+
+    private Loader(Builder build){
+        this.server = build.server;
+        this.appPath = build.appPath;
+        this.version = build.version;
     }
 
-    private void initialization(String line, Loader load){
-        String[] t = line.split("=");
-        for(options i : options.values()){
-            if(i.name().equals(t[0])){
-                i.setOptions(load, t[1]);
-            }
-        }
-    }
-
-
-    public void setAppFolder(String appFolder) {
-        this.appFolder = appFolder;
-    }
-
-    public String getAppFolder() {
-        return appFolder;
-    }
-
-    public Path getCurrenDir() {
-        return currenDir;
+    public Path getAppPath() {
+        return appPath;
     }
 
     public void setServer(URI server) {
@@ -62,4 +38,33 @@ public class Loader {
     public String getVersion() {
         return version;
     }
+
+
+    public static class Builder{
+        private URI server = null;
+        private String version = "";
+        private Path appPath = null;
+
+
+        public Builder (Path appPath){
+            this.appPath = appPath;
+        }
+
+        public Builder server(String server){
+            this.server = URI.create(server);
+            return this;
+        }
+
+        public Builder version(String version){
+            this.version = version;
+            return this;
+        }
+
+        public Loader build(){
+            return new Loader(this);
+        }
+
+    }
 }
+
+

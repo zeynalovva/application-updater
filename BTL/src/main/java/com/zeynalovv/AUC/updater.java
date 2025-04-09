@@ -1,16 +1,9 @@
 package com.zeynalovv.AUC;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ArrayNode;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
+import java.io.*;
 import java.math.BigInteger;
-import java.net.MalformedURLException;
 import java.net.URI;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -25,25 +18,45 @@ import java.util.Vector;
 import java.util.stream.Stream;
 
 public class updater {
-    public static void main(String[] args) {
+
+    public static Loader init(){
         Path currentDir = Paths.get("/home/zeynalovv/AppUpdater/BTL/src/main/java/com/zeynalovv/AUC");
         //Path currentDir = Paths.get(System.getProperty("user.dir"));
-
-        Loader load = null;
-        try {
-            load = new Loader(currentDir);
-        } catch (IOException e) {
+        Path optionPath = currentDir.resolve("options.txt");
+        HashMap<String, String> options = new HashMap<>();
+        try{
+            BufferedReader read = new BufferedReader(new FileReader(String.valueOf(optionPath)));
+            String line;
+            while((line = read.readLine()) != null){
+                String[] t = line.split("=");
+                switch (t[0]){
+                    case "SERVER":
+                        options.put(t[0], t[1]);
+                        break;
+                    case "VERSION":
+                        options.put(t[0], t[1]);
+                        break;
+                }
+            }
+        } catch (IOException e){
             System.out.println("Could not load the options!");
-            return;
+            return null;
         }
+        return new Loader.Builder(currentDir).server(options.get("SERVER")).build();
 
+    }
+
+    public static void main(String[] args) {
+        Loader load = init();
+        System.out.println(load.getAppPath());
 
         Downloader.download("checksum.json", load, "checksum.json");
+        /*
         ObjectMapper objectMapper = new ObjectMapper();
         HashMap<String, String> files = new HashMap<>(), folders = new HashMap<>(), translated = new HashMap<>();
         Map<String, Object> directoryTree = null;
         try {
-            directoryTree = objectMapper.readValue(new File(String.valueOf(currentDir.resolve("checksum.json"))), Map.class);
+            directoryTree = objectMapper.readValue(new File(String.valueOf(load.getAppPath().resolve("checksum.json"))), Map.class);
             for(Map.Entry<String, Object> entry : directoryTree.entrySet()){
                 if(entry.getKey().equals("files")){
                     files = (HashMap<String, String>) entry.getValue();
@@ -66,9 +79,9 @@ public class updater {
         ArrayList<String> relativeDirectoryPath = new ArrayList<>();
         ArrayList<Path> absoluteDirectoryPath = new ArrayList<>();
         try {
-            Stream<Path> tree = Files.walk(load.getCurrenDir());
+            Stream<Path> tree = Files.walk(load.getAppPath());
             tree.forEach(x -> {
-                String path = String.valueOf(currentDir.relativize(x));
+                String path = String.valueOf(load.getAppPath().relativize(x));
                 if(!path.equals("checksum.json")  && !path.equals("options.txt")){
                     if(Files.isRegularFile(x)) {
                         relativeFilePaths.add(path);
@@ -86,14 +99,14 @@ public class updater {
 
         //Create folders given by the json
         for(String i : folders.keySet()){
-            Path mkdir = currentDir.resolve(folders.get(i));
+            Path mkdir = load.getAppPath().resolve(folders.get(i));
             new File(String.valueOf(mkdir)).mkdirs();
         }
 
 
         //Check if the files have been altered
         for(String i : files.keySet()){
-            Path path = currentDir.resolve(Path.of(files.get(i)));
+            Path path = load.getAppPath().resolve(Path.of(files.get(i)));
             if(Files.exists(path)){
                 if(!checkFile(path, load).equals(i)){
                     Downloader.download(translated.get(i), load, files.get(i));
@@ -102,7 +115,7 @@ public class updater {
             else {
                 Downloader.download(translated.get(i), load, files.get(i));
             }
-        }
+        }*/
     }
 
 
@@ -146,7 +159,7 @@ public class updater {
     @Deprecated
     static void deleteFolders(Loader load, Path currentDir, Map<String, String> directoryTree){
         try{
-            Stream<Path> tree = Files.walk(load.getCurrenDir());
+            Stream<Path> tree = Files.walk(load.getAppPath());
             Vector<Path> tempList = new Vector<>();
             tree.forEach(x -> {
                 Path relative = currentDir.relativize(x);
