@@ -1,6 +1,7 @@
 package com.zeynalovv.AUC;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.w3c.dom.ls.LSOutput;
 
 import java.io.*;
 import java.net.URI;
@@ -19,10 +20,26 @@ public class Updater implements Updatable{
     private Stream<Path> list;
     private Path appDir;
     private URI serverURL;
+    private String version;
+
+    Updater(Path appDir, Path buildInfo){
+        this.appDir = appDir;
+        Map<String, String> table = (Map<String, String>) loadSettings(buildInfo);
+        for(String i : table.keySet()){
+            i.toLowerCase();
+            switch (i){
+                case "server":
+                    serverURL = URI.create(table.get(i));
+                    break;
+                case "version":
+                    version =  table.get(i);
+                    break;
+            }
+        }
+    }
 
 
     public void download(String fileName, String destination){
-
         String test = null;
         try{
             Path pth =  appDir.resolve(fileName);
@@ -42,6 +59,7 @@ public class Updater implements Updatable{
     }
 
 
+
     public String convertBinaryFile(Path path) throws IOException {
         File file = new File(String.valueOf(path));
         FileInputStream inputStream = new FileInputStream(file);
@@ -55,11 +73,16 @@ public class Updater implements Updatable{
         return byt.toString();
     }
 
-    public Map<?, ?> loadSettings(Path src) throws IOException {
+    public Map<?, ?> loadSettings(Path src) {
         Map<?, ?> Table = new HashMap<>();
         ObjectMapper jsonFile = new ObjectMapper();
-        Table = jsonFile.readValue(new File(String.valueOf(src)), Map.class);
-
+        try{
+            Table = jsonFile.readValue(new File(String.valueOf(appDir.resolve(src))), Map.class);
+        }
+        catch (IOException e){
+            System.out.println("The path given for options file could not be read!!");
+            return null;
+        }
         return Table;
     }
 

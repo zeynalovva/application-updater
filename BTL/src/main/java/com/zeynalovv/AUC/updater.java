@@ -51,7 +51,6 @@ public class updater {
         System.out.println(load.getAppPath());
 
         Downloader.download("checksum.json", load, "checksum.json");
-        /*
         ObjectMapper objectMapper = new ObjectMapper();
         HashMap<String, String> files = new HashMap<>(), folders = new HashMap<>(), translated = new HashMap<>();
         Map<String, Object> directoryTree = null;
@@ -115,7 +114,7 @@ public class updater {
             else {
                 Downloader.download(translated.get(i), load, files.get(i));
             }
-        }*/
+        }
     }
 
 
