@@ -33,7 +33,9 @@ public interface Updatable {
         new File(String.valueOf(path)).mkdirs();
     }
 
-    Map<?, ?> loadSettings(Path src) throws IOException;
+    private static Map<?, ?> loadSettings(Path src) throws IOException {
+        return null;
+    }
 
     Updater scanPath(Path path) throws IOException;
 
