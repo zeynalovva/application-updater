@@ -1,7 +1,7 @@
 package com.zeynalovv.AUC;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.zeynalovv.AUC.updaterExceptions.*;
+import com.zeynalovv.AUC.ExceptionAUC.*;
 
 import java.io.*;
 import java.net.URI;

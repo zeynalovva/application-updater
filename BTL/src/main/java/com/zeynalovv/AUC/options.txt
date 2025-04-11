@@ -1,2 +1,0 @@
-SERVER=http://127.0.0.1/Application/
-VERSION=1.0.0

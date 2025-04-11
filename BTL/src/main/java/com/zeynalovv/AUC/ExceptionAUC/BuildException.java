@@ -1,4 +1,4 @@
-package com.zeynalovv.AUC.updaterExceptions;
+package com.zeynalovv.AUC.ExceptionAUC;
 
 public class BuildException extends RuntimeException {
     public BuildException() {

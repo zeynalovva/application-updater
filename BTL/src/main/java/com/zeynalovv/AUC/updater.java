@@ -18,7 +18,7 @@ import java.util.Vector;
 import java.util.stream.Stream;
 
 public class updater {
-
+    /*
     public static Loader init(){
         Path currentDir = Paths.get("/home/zeynalovv/AppUpdater/BTL/src/main/java/com/zeynalovv/AUC");
         //Path currentDir = Paths.get(System.getProperty("user.dir"));
@@ -173,5 +173,5 @@ public class updater {
             throw new RuntimeException(e);
         }
     }
-
+    */
 }
