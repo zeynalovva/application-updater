@@ -8,8 +8,8 @@ import java.util.List;
 
 public class test {
     public static void main(String[] args) throws IOException, NoSuchAlgorithmException {
-        Updater update = new Updater(Path.of("/home/zeynalovv/AppUpdater/BTL/src/main/java/com/zeynalovv/AUC"),
-                Path.of("/home/zeynalovv/AppUpdater/BTL/src/main/java/com/zeynalovv/AUC/options.json")).build();
+        Updater update = new Updater(Path.of("/home/zeynalovv/AppUpdater/src/main/java/com/zeynalovv/AUC"),
+                Path.of("/home/zeynalovv/AppUpdater/src/main/java/com/zeynalovv/AUC/options.json")).build();
         update.readJson("checksum.json");
         update.noNewFile().start();
     }
