@@ -1,6 +1,7 @@
 package com.zeynalovv.AUC;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.zeynalovv.AUC.updaterExceptions.*;
 
 import java.io.*;
 import java.net.URI;
@@ -9,6 +10,7 @@ import java.nio.channels.FileChannel;
 import java.nio.channels.ReadableByteChannel;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -20,36 +22,68 @@ public final class Updater implements Updatable{
     private Path appDir;
     private URI serverURL;
     private String version;
-    public List<Path> relativeFile, relativeDir;
+    private List<Path> relativeFile, relativeDir;
+    private boolean noDelete = false, noNewFile = false, noChange = false;
+    public Map<String, String> filesJson, foldersJson, translatedJson;
 
     public Updater(Path appDir, Path buildInfo){
         this.appDir = appDir;
         Map<String, String> table = (Map<String, String>) this.loadSettings(buildInfo);
         for(String i : table.keySet()){
-            i.toLowerCase();
-            switch (i){
+            String lowered = i.toLowerCase();
+            switch (lowered){
                 case "server":
-                    serverURL = URI.create(table.get(i));
+                    serverURL = URI.create(table.get(lowered));
                     break;
                 case "version":
-                    version =  table.get(i);
+                    version =  table.get(lowered);
                     break;
             }
         }
+        if(serverURL == null || version == null){
+            throw new LoaderNullException();
+        }
+    }
+
+
+
+    public void start() throws NoSuchAlgorithmException, IOException{
+        for(String i : foldersJson.keySet()){
+            createDirectory(appDir.resolve(foldersJson.get(i)));
+        }
+
+        if(!noNewFile){
+            for(String i : filesJson.keySet()){
+                Path path = appDir.resolve(filesJson.get(i));
+                if(!Files.exists(path)){
+                    download(translatedJson.get(i), filesJson.get(i));
+                }
+            }
+        }
+
+        if(!noChange){
+            for(String i : filesJson.keySet()){
+                Path path = appDir.resolve(filesJson.get(i));
+                if(Files.exists(path) && !isSameFile(path, i)){
+                    download(translatedJson.get(i), filesJson.get(i));
+                }
+            }
+        }
+
     }
 
     public Updater build() throws IOException {
         this.relativeFile = relativize(this.scanPath(appDir).files());
         this.relativeDir = relativize(this.scanPath(appDir).directories());
+
         return this;
     }
 
     public void download(String fileName, String destination){
-        String test = null;
+        String reason = null;
         try{
-            Path pth =  appDir.resolve(fileName);
-            URI url = serverURL.resolve(pth.toString());
-            test = url.toString();
+            URI url = serverURL.resolve(fileName);
+            reason = url.toString();
             ReadableByteChannel readableByteChannel = Channels.newChannel(url.toURL().openStream());
             FileOutputStream fileOutputStream = new FileOutputStream(String.valueOf(appDir.resolve(destination)));
             FileChannel fileChannel = fileOutputStream.getChannel();
@@ -57,26 +91,27 @@ public final class Updater implements Updatable{
             System.out.println(url);
         }
         catch (Exception e){
-            e.printStackTrace();
-            System.out.println("Connection refused!: " + test);
-
+            throw new DownloadException(reason);
         }
     }
 
 
-
-
-    public String convertBinaryFile(Path path) throws IOException {
-        File file = new File(String.valueOf(path));
-        FileInputStream inputStream = new FileInputStream(file);
-        byte[] bytes = new byte[(int) file.length()];
-        inputStream.read(bytes);
-        StringBuilder byt = new StringBuilder();
-
-        for (byte b : bytes) {
-            byt.append(Integer.toBinaryString((b & 0xFF) + 0x100).substring(1));
+    public void readJson(String checksumFile) throws IOException {
+        download(checksumFile, checksumFile);
+        ObjectMapper readFile = new ObjectMapper();
+        Map<String, Object> temp = readFile.readValue(new File(String.valueOf(appDir.resolve(checksumFile))), Map.class);
+        for(Map.Entry<String, Object> entry : temp.entrySet()){
+            switch (entry.getKey()) {
+                case "files" -> filesJson = (HashMap<String, String>) entry.getValue();
+                case "folders" -> foldersJson = (HashMap<String, String>) entry.getValue();
+                case "translated" -> translatedJson = (HashMap<String, String>) entry.getValue();
+            }
         }
-        return byt.toString();
+    }
+
+
+    public boolean isSameFile(Path pth1, String hashValue) throws NoSuchAlgorithmException, IOException {
+        return hashOf(pth1).equals(hashValue);
     }
 
     private Map<?, ?> loadSettings(Path src) {
@@ -126,5 +161,18 @@ public final class Updater implements Updatable{
         return this;
     }
 
+    public Updater noDelete(){
+        noDelete = true;
+        return this;
+    }
 
+    public Updater noNewFile(){
+        noNewFile = true;
+        return this;
+    }
+
+    public Updater noChange(){
+        noChange = true;
+        return this;
+    }
 }
