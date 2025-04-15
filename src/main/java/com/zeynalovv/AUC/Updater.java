@@ -148,13 +148,6 @@ public final class Updater implements Updatable{
         return temp;
     }
 
-    public List<Path> all(){
-        List<Path> temp = new ArrayList<>();
-        temp.forEach(x -> temp.add(x));
-
-        return temp;
-    }
-
     public Updater scanPath(Path path) throws IOException {
         list = Files.walk(path);
 

@@ -13,17 +13,13 @@ import java.util.Map;
 
 public interface Updatable {
 
-    Updater scanPath(Path path) throws IOException;
+    Object scanPath(Path path) throws IOException;
 
     List<Path> files();
 
     List<Path> directories();
 
-    List<Path> all();
-
-    private static Map<?, ?> loadSettings(Path src) throws IOException {
-        return null;
-    }
+    List<?> relativize(List<Path> absolutPath);
 
     default void createDirectory(Path path){
         new File(String.valueOf(path)).mkdirs();

@@ -21,34 +21,12 @@ import com.jcraft.jsch.SftpException;
 public class main {
 
     public static void main(String[] args) {
-        ProcessBuilder terminal;
-        String os = System.getProperty("os.name").toLowerCase();
-        Path applicationDir = Paths.get(System.getProperty("user.dir")), currentDir = applicationDir.resolve("BTL"), tempDir = null;
-        if (os.contains("win")) {
-            String Dir = String.valueOf(currentDir.resolve("settings.exe"));
-            terminal = new ProcessBuilder("cmd.exe", "/c", "start", "cmd.exe", "/k", Dir);
-            tempDir = Paths.get(System.getenv("TEMP"));
-        } else if (os.contains("mac") || os.contains("nix") || os.contains("nux")) {
-            String Dir = String.valueOf(currentDir.resolve("settings"));
-            terminal = new ProcessBuilder("/bin/sh", "-c", "x-terminal-emulator -e " + Dir +
-                    " || gnome-terminal -- " + Dir + " || konsole -e " + Dir + " || xfce4-terminal -e " + Dir +
-                    " || mate-terminal -e " + Dir + " || lxterminal -e " + Dir + " || alacritty -e " + Dir +
-                    " || st -e " + Dir + " || xterm -hold -e " + Dir);
-            tempDir = Paths.get("/tmp");
-        } else {
-            throw new UnsupportedOperationException("Unsupported OS: " + os);
-        }
-        try {
-            Process terminalProc = terminal.start();
-            terminalProc.waitFor();
-        } catch (IOException | InterruptedException e) {
-            throw new RuntimeException(e);
-        }
 
-        start(applicationDir, tempDir);
+
+
     }
 
-
+    /*
     public static void start(Path applicationDir, Path tempDir){
         //Setting up the environment
         Loader load = new Loader(applicationDir, tempDir);
@@ -100,7 +78,7 @@ public class main {
         /*
         for (String i : relativeDirectoryPath){
             table.put(i, i);
-        }*/
+        }
 
 
 
@@ -151,8 +129,9 @@ public class main {
         } catch (JSchException | SftpException e) {
             throw new RuntimeException(e);
         }
-    }
 
+    }
+    */
 
     public static String chekcsum(String val){
         try {
@@ -170,6 +149,7 @@ public class main {
         }
 
     }
+
     static String translator(String filePath){
         StringBuilder t = new StringBuilder();
         for (int i = 0; i < filePath.length();i++) {
@@ -181,7 +161,6 @@ public class main {
             else if(filePath.charAt(i) == '&') t.append("%26");
             else if(filePath.charAt(i) == '+') t.append("%2B");
             else if(filePath.charAt(i) == ',') t.append("%2C");
-            //else if(filePath.charAt(i) == '/') t.append("%2F");
             else if(filePath.charAt(i) == ':') t.append("%3A");
             else if(filePath.charAt(i) == ';') t.append("%3B");
             else if(filePath.charAt(i) == '=') t.append("%3D");
@@ -194,13 +173,6 @@ public class main {
         return t.toString();
     }
 
-    static void initialization(String line, Loader load){
-        String[] t = line.split("=");
-        for(options i : options.values()){
-            if(i.name().equals(t[0])){
-                i.setOptions(load, t[1]);
-            }
-        }
-    }
+
 
 }
