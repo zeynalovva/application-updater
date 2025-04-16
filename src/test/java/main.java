@@ -1,8 +1,12 @@
 import com.zeynalovv.AUC.*;
+import com.zeynalovv.AUS.Client;
 
 import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.security.NoSuchAlgorithmException;
+import java.util.HashMap;
+import java.util.Map;
 
 public class main {
 
@@ -11,5 +15,7 @@ public class main {
                 Path.of("/home/zeynalovv/Desktop/TestApp/options.json")).build();
         update.readJson("checksum.json");
         update.start();
+
+
     }
 }

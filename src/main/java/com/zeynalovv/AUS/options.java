@@ -35,3 +35,4 @@ public enum options{
     };
     public abstract void setOptions(Loader load, String value);
 }
+

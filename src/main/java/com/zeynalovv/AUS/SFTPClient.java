@@ -1,23 +1,31 @@
 package com.zeynalovv.AUS;
 
-import com.jcraft.jsch.JSchException;
-import com.jcraft.jsch.SftpException;
 import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.io.File;
-import java.io.IOException;
-import java.security.NoSuchAlgorithmException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import javax.swing.JFileChooser;
+import javax.swing.filechooser.FileSystemView;
+import java.awt.Component;
+import java.util.Map;
+import javax.swing.SwingUtilities;
 
 public class SFTPClient extends Application {
 
@@ -114,38 +122,36 @@ public class SFTPClient extends Application {
         // Buttons for adding and removing ignore items
         HBox ignoreButtonsBox = new HBox(10);
 
-        Button addFileButton = new Button("Add Files");
-        addFileButton.setOnAction(e -> addIgnoreFiles(primaryStage));
-
-        Button addFolderButton = new Button("Add Folders");
-        addFolderButton.setOnAction(e -> addIgnoreFolders(primaryStage));
+        Button addItemsButton = new Button("Add Files/Folders to Ignore");
+        addItemsButton.setOnAction(e -> addItemsToIgnore());
 
         Button removeButton = new Button("Remove Selected");
         removeButton.setOnAction(e -> removeSelectedIgnoreItems());
 
-        ignoreButtonsBox.getChildren().addAll(addFileButton, addFolderButton, removeButton);
+        ignoreButtonsBox.getChildren().addAll(addItemsButton, removeButton);
         grid.add(ignoreButtonsBox, 0, 10, 3, 1);
 
         // Transfer button
         transferButton = new Button("Transfer Files");
         transferButton.setOnAction(e -> {
-            // You'll connect this to your existing SFTP implementation
-            //System.out.println("Local Path: " + localPathField.getText());
-            //System.out.println("File Name: " + fileNameField.getText());
-            //System.out.println("Remote Path: " + remotePathField.getText());
-            //System.out.println("IP Address: " + ipAddressField.getText());
-            //System.out.println("Port: " + portField.getText());
-            //System.out.println("Username: " + usernameField.getText());
-            //System.out.println("Password: " + passwordField.getText());
-            Client SFTPClient = new Client(localPathField.getText(), fileNameField.getText(), remotePathField.getText(),
-                    ipAddressField.getText(), portField.getText(), usernameField.getText(), passwordField.getText());
+            Map<Path, String> temp = new HashMap<>();
+            ignoreItems.add("options.json");
+            ignoreItems.forEach(x -> {
+                Path h = Path.of(x);
+                temp.put(h, Files.isDirectory(h) ? "D" : "F");
+            });
 
+            Client SFTPClient = new Client(localPathField.getText(), fileNameField.getText(), remotePathField.getText(),
+                    ipAddressField.getText(), portField.getText(), usernameField.getText(), passwordField.getText(), temp);
+            boolean transferSuccessful = validateInputs();
             try {
                 SFTPClient.start();
             } catch (Exception ex) {
-                ex.printStackTrace();
+                transferSuccessful = false;
             }
 
+            // Show the result in a popup
+            showTransferResultPopup(primaryStage, transferSuccessful);
         });
         grid.add(transferButton, 1, 11);
 
@@ -153,6 +159,55 @@ public class SFTPClient extends Application {
         Scene scene = new Scene(grid, 550, 580);
         primaryStage.setScene(scene);
         primaryStage.show();
+    }
+
+    private boolean validateInputs() {
+        // This is where you would call your actual SFTP implementation
+        // For now, just do basic validation
+        String localPath = localPathField.getText();
+        String remotePath = remotePathField.getText();
+        String ipAddress = ipAddressField.getText();
+        String port = portField.getText();
+        String username = usernameField.getText();
+        String password = passwordField.getText();
+
+        // Simple validation - check if required fields are filled
+        return !localPath.isEmpty() && !remotePath.isEmpty() &&
+                !ipAddress.isEmpty() && !port.isEmpty() &&
+                !username.isEmpty() && !password.isEmpty();
+    }
+
+    private void showTransferResultPopup(Stage parentStage, boolean successful) {
+        Stage popupStage = new Stage();
+        popupStage.initModality(Modality.APPLICATION_MODAL);
+        popupStage.initOwner(parentStage);
+        popupStage.setTitle("Transfer Status");
+
+        String message;
+        String style;
+
+        if (successful) {
+            message = "File transfer completed successfully!";
+            style = "-fx-text-fill: green; -fx-font-weight: bold;";
+        } else {
+            message = "File transfer failed. Please check your inputs.";
+            style = "-fx-text-fill: red; -fx-font-weight: bold;";
+        }
+
+        Label statusLabel = new Label(message);
+        statusLabel.setStyle(style);
+
+        Button closeButton = new Button("Close");
+        closeButton.setOnAction(e -> popupStage.close());
+
+        VBox layout = new VBox(20);
+        layout.setPadding(new Insets(20));
+        layout.setAlignment(Pos.CENTER);
+        layout.getChildren().addAll(statusLabel, closeButton);
+
+        Scene scene = new Scene(layout, 350, 150);
+        popupStage.setScene(scene);
+        popupStage.showAndWait();
     }
 
     private void browseForFolder(Stage stage) {
@@ -166,52 +221,40 @@ public class SFTPClient extends Application {
         }
     }
 
-    private void addIgnoreFiles(Stage stage) {
-        FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Select Files to Ignore");
+    private void addItemsToIgnore() {
+        // We'll use Swing's JFileChooser since JavaFX doesn't natively support
+        // selecting both files and folders in the same dialog
+        SwingUtilities.invokeLater(() -> {
+            JFileChooser fileChooser = new JFileChooser(FileSystemView.getFileSystemView().getHomeDirectory());
+            fileChooser.setDialogTitle("Select Files and Folders to Ignore");
+            fileChooser.setMultiSelectionEnabled(true);
+            fileChooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES); // Allow both files and directories
 
-        // Set initial directory to the current local path if it exists
-        String localPath = localPathField.getText();
-        if (!localPath.isEmpty()) {
-            File directory = new File(localPath);
-            if (directory.exists() && directory.isDirectory()) {
-                fileChooser.setInitialDirectory(directory);
-            }
-        }
-
-        List<File> selectedFiles = fileChooser.showOpenMultipleDialog(stage);
-
-        if (selectedFiles != null) {
-            for (File file : selectedFiles) {
-                String path = file.getAbsolutePath();
-                if (!ignoreItems.contains(path)) {
-                    ignoreItems.add(path);
+            // Set initial directory to the current local path if it exists
+            String localPath = localPathField.getText();
+            if (!localPath.isEmpty()) {
+                File directory = new File(localPath);
+                if (directory.exists() && directory.isDirectory()) {
+                    fileChooser.setCurrentDirectory(directory);
                 }
             }
-        }
-    }
 
-    private void addIgnoreFolders(Stage stage) {
-        DirectoryChooser directoryChooser = new DirectoryChooser();
-        directoryChooser.setTitle("Select Folder to Ignore");
+            int result = fileChooser.showOpenDialog(null);
 
-        // Set initial directory to the current local path if it exists
-        String localPath = localPathField.getText();
-        if (!localPath.isEmpty()) {
-            File directory = new File(localPath);
-            if (directory.exists() && directory.isDirectory()) {
-                directoryChooser.setInitialDirectory(directory);
+            if (result == JFileChooser.APPROVE_OPTION) {
+                File[] selectedFiles = fileChooser.getSelectedFiles();
+
+                // Add the selected files/folders to our list
+                javafx.application.Platform.runLater(() -> {
+                    for (File file : selectedFiles) {
+                        String path = file.getAbsolutePath();
+                        if (!ignoreItems.contains(path)) {
+                            ignoreItems.add(path);
+                        }
+                    }
+                });
             }
-        }
-
-        File selectedDirectory = directoryChooser.showDialog(stage);
-
-        if (selectedDirectory != null) {
-            String path = selectedDirectory.getAbsolutePath();
-            if (!ignoreItems.contains(path)) {
-                ignoreItems.add(path);
-            }
-        }
+        });
     }
 
     private void removeSelectedIgnoreItems() {

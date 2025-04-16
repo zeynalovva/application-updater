@@ -25,10 +25,11 @@ public class Client implements Updatable{
     private List<Path> absoluteFile;
     private List<String> relativeDir;
     private Map<String, String> hashTable;
+    private Map<Path, String> ignoreItems;
 
 
     public Client(String localPath, String fileName, String remotePath, String ipAddress,
-                  String port, String username, String password){
+                  String port, String username, String password, Map<Path, String> ignoreItems){
 
         this.localPath = Path.of(localPath);
         this.ipAddress = ipAddress;
@@ -37,6 +38,7 @@ public class Client implements Updatable{
         this.remotePath = Path.of(remotePath);
         this.username = username;
         this.fileName = fileName;
+        this.ignoreItems = ignoreItems;
     }
 
     public void start() throws IOException, NoSuchAlgorithmException, SftpException, JSchException {
@@ -50,7 +52,6 @@ public class Client implements Updatable{
         }
 
         parser();
-
         upload();
 
     }
@@ -78,6 +79,7 @@ public class Client implements Updatable{
         ObjectNode files = json.createObjectNode();
         ObjectNode folders = json.createObjectNode();
         ObjectNode translated = json.createObjectNode();
+        ObjectNode ignoreList = json.createObjectNode();
 
         for(String i : hashTable.keySet()){
             files.put(i, hashTable.get(i));
@@ -85,8 +87,14 @@ public class Client implements Updatable{
         }
 
         for(String i : relativeDir)
-            folders.put(i, i);
+            folders.put(i, "D");
 
+        for(Path i : ignoreItems.keySet()){
+            if(ignoreItems.get(i) == "D") ignoreList.put(String.valueOf(localPath.relativize(i)), "D");
+            else ignoreList.put(String.valueOf(localPath.relativize(i)), "F");
+        }
+
+        root.set("ignore", ignoreList);
         root.set("files", files);
         root.set("folders", folders);
         root.set("translated", translated);
@@ -102,6 +110,7 @@ public class Client implements Updatable{
 
         return temp;
     }
+
 
     public List<Path> directories(){
         List<Path> temp = new ArrayList<>();
@@ -127,13 +136,6 @@ public class Client implements Updatable{
 
         return this;
     }
-
-
-
-
-
-
-
 
     public String translator(char[] filePath){
         StringBuilder t = new StringBuilder();

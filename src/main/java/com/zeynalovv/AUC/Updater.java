@@ -11,10 +11,7 @@ import java.nio.channels.ReadableByteChannel;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.security.NoSuchAlgorithmException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Stream;
 
 public final class Updater implements Updatable{
@@ -24,7 +21,7 @@ public final class Updater implements Updatable{
     private String version;
     private List<Path> relativeFile, relativeDir;
     private boolean noDelete = false, noNewFile = false, noChange = false;
-    public Map<String, String> filesJson, foldersJson, translatedJson;
+    public Map<String, String> filesJson, foldersJson, translatedJson, ignoreJson;
 
     public Updater(Path appDir, Path buildInfo){
         this.appDir = appDir;
@@ -50,6 +47,18 @@ public final class Updater implements Updatable{
     public void start() throws NoSuchAlgorithmException, IOException{
         for(String i : foldersJson.keySet()){
             createDirectory(appDir.resolve(foldersJson.get(i)));
+        }
+        if(!noDelete){
+            for(Path file : relativeFile){
+                if(!filesJson.containsValue(file) && !ignoreJson.containsKey(file)){
+                    Files.delete(appDir.resolve(file));
+                }
+            }
+            for(Path dir : relativeDir){
+                if(!foldersJson.containsKey(dir) && !ignoreJson.containsKey(dir)){
+                    delete(appDir.resolve(dir));
+                }
+            }
         }
 
         if(!noNewFile){
@@ -105,6 +114,7 @@ public final class Updater implements Updatable{
                 case "files" -> filesJson = (HashMap<String, String>) entry.getValue();
                 case "folders" -> foldersJson = (HashMap<String, String>) entry.getValue();
                 case "translated" -> translatedJson = (HashMap<String, String>) entry.getValue();
+                case "ignore" -> ignoreJson = (HashMap<String, String>) entry.getValue();
             }
         }
     }
@@ -167,5 +177,13 @@ public final class Updater implements Updatable{
     public Updater noChange(){
         noChange = true;
         return this;
+    }
+
+    public void delete(Path dir) throws IOException {
+        try (Stream<Path> paths = Files.walk(dir)){
+            paths.sorted(Comparator.reverseOrder())
+                    .map(Path::toFile)
+                    .forEach(File::delete);
+        }
     }
 }
