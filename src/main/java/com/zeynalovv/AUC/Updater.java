@@ -16,15 +16,16 @@ import java.util.stream.Stream;
 
 public final class Updater implements Updatable{
     private Stream<Path> list;
-    private Path appDir;
+    private Path appDir, buildInfo;
     private URI serverURL;
     private String version;
-    private List<Path> relativeFile, relativeDir;
+    private List<String> relativeFile, relativeDir;
     private boolean noDelete = false, noNewFile = false, noChange = false;
     public Map<String, String> filesJson, foldersJson, translatedJson, ignoreJson;
 
     public Updater(Path appDir, Path buildInfo){
         this.appDir = appDir;
+        this.buildInfo = buildInfo;
         Map<String, String> table = (Map<String, String>) this.loadSettings(buildInfo);
         for(String i : table.keySet()){
             String lowered = i.toLowerCase();
@@ -48,14 +49,17 @@ public final class Updater implements Updatable{
         for(String i : foldersJson.keySet()){
             createDirectory(appDir.resolve(foldersJson.get(i)));
         }
+        ignoreJson.put(String.valueOf(appDir.relativize(buildInfo)), "F");
         if(!noDelete){
-            for(Path file : relativeFile){
+            for(String file : relativeFile){
                 if(!filesJson.containsValue(file) && !ignoreJson.containsKey(file)){
+                    System.out.println(file);
                     Files.delete(appDir.resolve(file));
                 }
             }
-            for(Path dir : relativeDir){
-                if(!foldersJson.containsKey(dir) && !ignoreJson.containsKey(dir)){
+            for(String dir : relativeDir){
+                if(!foldersJson.containsKey(dir) && !ignoreJson.containsKey(dir) && !dir.equals("")){
+                    System.out.println(dir);
                     delete(appDir.resolve(dir));
                 }
             }
@@ -137,9 +141,9 @@ public final class Updater implements Updatable{
         return Table;
     }
 
-    public List<Path> relativize(List<Path> absolutPath){
-        List<Path> temp = new ArrayList<>();
-        absolutPath.forEach(x -> temp.add(appDir.relativize(x)));
+    public List<String> relativize(List<Path> absolutPath){
+        List<String> temp = new ArrayList<>();
+        absolutPath.forEach(x -> temp.add(String.valueOf(appDir.relativize(x))));
 
         return temp;
     }

@@ -135,7 +135,7 @@ public class SFTPClient extends Application {
         transferButton = new Button("Transfer Files");
         transferButton.setOnAction(e -> {
             Map<Path, String> temp = new HashMap<>();
-            ignoreItems.add("options.json");
+            //boolean check = false;
             ignoreItems.forEach(x -> {
                 Path h = Path.of(x);
                 temp.put(h, Files.isDirectory(h) ? "D" : "F");

@@ -86,8 +86,10 @@ public class Client implements Updatable{
             translated.put(i, translator(hashTable.get(i).toCharArray()));
         }
 
-        for(String i : relativeDir)
-            folders.put(i, "D");
+        for(String i : relativeDir){
+            if(!i.equals("")) folders.put(i, "D");
+        }
+
 
         for(Path i : ignoreItems.keySet()){
             if(ignoreItems.get(i) == "D") ignoreList.put(String.valueOf(localPath.relativize(i)), "D");
