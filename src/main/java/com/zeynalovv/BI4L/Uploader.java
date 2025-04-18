@@ -1,4 +1,4 @@
-package com.zeynalovv.AUS;
+package com.zeynalovv.BI4L;
 
 import com.jcraft.jsch.*;
 

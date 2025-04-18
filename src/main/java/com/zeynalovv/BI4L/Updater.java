@@ -1,7 +1,7 @@
-package com.zeynalovv.AUC;
+package com.zeynalovv.BI4L;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.zeynalovv.AUC.ExceptionAUC.*;
+import com.zeynalovv.BI4L.ExceptionLibrary.*;
 
 import java.io.*;
 import java.net.URI;

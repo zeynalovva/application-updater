@@ -1,6 +1,4 @@
-package com.zeynalovv.AUC;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
+package com.zeynalovv.BI4L;
 
 import java.io.*;
 import java.math.BigInteger;
@@ -9,7 +7,6 @@ import java.nio.file.Path;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.List;
-import java.util.Map;
 
 public interface Updatable {
 

@@ -1,10 +1,9 @@
-package com.zeynalovv.AUS;
+package com.zeynalovv.BI4L;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.jcraft.jsch.JSchException;
 import com.jcraft.jsch.SftpException;
-import com.zeynalovv.AUC.Updatable;
 
 import java.io.File;
 import java.io.IOException;

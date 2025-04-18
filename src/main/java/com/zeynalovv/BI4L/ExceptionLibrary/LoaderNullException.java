@@ -1,4 +1,4 @@
-package com.zeynalovv.AUC.ExceptionAUC;
+package com.zeynalovv.BI4L.ExceptionLibrary;
 
 public class LoaderNullException extends RuntimeException {
     public LoaderNullException() {
