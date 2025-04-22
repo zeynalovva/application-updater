@@ -37,7 +37,7 @@ public class SFTPClient extends Application {
 
     // For ignore functionality
     private ListView<String> ignoreListView;
-    private ObservableList<String> ignoreItems;
+    private ObservableList<String> ignoreitm;
 
     @Override
     public void start(Stage primaryStage) {
@@ -111,8 +111,8 @@ public class SFTPClient extends Application {
         grid.add(ignoreLabel, 0, 8, 3, 1);
 
         // Create the ignore list view
-        ignoreItems = FXCollections.observableArrayList();
-        ignoreListView = new ListView<>(ignoreItems);
+        ignoreitm = FXCollections.observableArrayList();
+        ignoreListView = new ListView<>(ignoreitm);
         ignoreListView.setPrefHeight(150);
         grid.add(ignoreListView, 0, 9, 3, 1);
 
@@ -131,15 +131,15 @@ public class SFTPClient extends Application {
         // Transfer button
         transferButton = new Button("Transfer Files");
         transferButton.setOnAction(e -> {
-            Map<Path, String> temp = new HashMap<>();
+            Map<Path, String> ignoreItemList = new HashMap<>();
             //boolean check = false;
-            ignoreItems.forEach(x -> {
+            ignoreitm.forEach(x -> {
                 Path h = Path.of(x);
-                temp.put(h, Files.isDirectory(h) ? "D" : "F");
+                ignoreItemList.put(h, Files.isDirectory(h) ? "D" : "F");
             });
 
             Client SFTPClient = new Client(localPathField.getText(), fileNameField.getText(), remotePathField.getText(),
-                    ipAddressField.getText(), portField.getText(), usernameField.getText(), passwordField.getText(), temp);
+                    ipAddressField.getText(), portField.getText(), usernameField.getText(), passwordField.getText(), ignoreItemList);
             boolean transferSuccessful = validateInputs();
             try {
                 SFTPClient.start();
@@ -245,8 +245,8 @@ public class SFTPClient extends Application {
                 javafx.application.Platform.runLater(() -> {
                     for (File file : selectedFiles) {
                         String path = file.getAbsolutePath();
-                        if (!ignoreItems.contains(path)) {
-                            ignoreItems.add(path);
+                        if (!ignoreitm.contains(path)) {
+                            ignoreitm.add(path);
                         }
                     }
                 });
@@ -256,7 +256,7 @@ public class SFTPClient extends Application {
 
     private void removeSelectedIgnoreItems() {
         List<String> selectedItems = ignoreListView.getSelectionModel().getSelectedItems();
-        ignoreItems.removeAll(selectedItems);
+        ignoreitm.removeAll(selectedItems);
     }
 
     public static void main(String[] args) {

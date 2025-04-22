@@ -20,11 +20,11 @@ public class Client implements Updatable{
     private final Path localPath, remotePath;
     private final String port, username, password;
     private final String fileName, ipAddress;
+    private Map<Path, String> ignoreItems;
     private Stream<Path> list;
     private List<Path> absoluteFile;
     private List<String> relativeDir;
     private Map<String, String> hashTable;
-    private Map<Path, String> ignoreItems;
 
 
     public Client(String localPath, String fileName, String remotePath, String ipAddress,
