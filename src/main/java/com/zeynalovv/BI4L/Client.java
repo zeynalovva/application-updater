@@ -112,7 +112,6 @@ public class Client implements Updatable{
             if(!i.equals("")) folders.put(i, "D");
         }
 
-
         for(Path i : ignoreItems.keySet()){
             if(ignoreItems.get(i) == "D") ignoreList.put(String.valueOf(localPath.relativize(i)), "D");
             else ignoreList.put(String.valueOf(localPath.relativize(i)), "F");
