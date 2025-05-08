@@ -26,7 +26,7 @@ public final class Uploader {
     }
 
     /**
-     * Opens a tunnel between the server and <code>Uploader</code>
+     * Establishes a connection between the server and <code>Uploader</code>
      * @throws JSchException when an error occurs while opening a connection with the remote SFTP server
      */
     public void openConnection() throws JSchException {
@@ -74,7 +74,7 @@ public final class Uploader {
     }
 
     /**
-     * Closes already opened connection.
+     * Closes established opened connection.
      */
     public void close(){
         jschSession.disconnect();

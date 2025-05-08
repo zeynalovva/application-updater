@@ -20,7 +20,7 @@ public final class Updater implements Updatable{
     private URI serverURL;
     private String version;
     private List<String> relativeFile, relativeDir;
-    private boolean noDelete = false, noNewFile = false, noChange = false;
+    private boolean noDeletetion = false, noNewFile = false, noChange = false;
     public Map<String, String> filesJson, foldersJson, translatedJson, ignoreJson;
 
     public Updater(Path appDir, Path buildInfo){
@@ -50,7 +50,7 @@ public final class Updater implements Updatable{
             createDirectory(appDir.resolve(foldersJson.get(i)));
         }
         ignoreJson.put(String.valueOf(appDir.relativize(buildInfo)), "F");
-        if(!noDelete){
+        if(!noDeletetion){
             for(String file : relativeFile){
                 if(!filesJson.containsValue(file) && !ignoreJson.containsKey(file)){
                     System.out.println(file);
@@ -60,7 +60,7 @@ public final class Updater implements Updatable{
             for(String dir : relativeDir){
                 if(!foldersJson.containsKey(dir) && !ignoreJson.containsKey(dir) && !dir.equals("")){
                     System.out.println(dir);
-                    delete(appDir.resolve(dir));
+                    deleteDir(appDir.resolve(dir));
                 }
             }
         }
@@ -124,8 +124,8 @@ public final class Updater implements Updatable{
     }
 
 
-    public boolean isSameFile(Path pth1, String hashValue) throws NoSuchAlgorithmException, IOException {
-        return hashOf(pth1).equals(hashValue);
+    public boolean isSameFile(Path pth, String hashValue) throws NoSuchAlgorithmException, IOException {
+        return hashOf(pth).equals(hashValue);
     }
 
     private Map<?, ?> loadSettings(Path src) {
@@ -169,7 +169,7 @@ public final class Updater implements Updatable{
     }
 
     public Updater noDelete(){
-        noDelete = true;
+        noDeletetion = true;
         return this;
     }
 
@@ -183,7 +183,7 @@ public final class Updater implements Updatable{
         return this;
     }
 
-    public void delete(Path dir) throws IOException {
+    public void deleteDir(Path dir) throws IOException {
         try (Stream<Path> paths = Files.walk(dir)){
             paths.sorted(Comparator.reverseOrder())
                     .map(Path::toFile)
